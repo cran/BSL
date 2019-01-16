@@ -9,7 +9,7 @@
 \usage{
 data(ma2)
 
-ma2_sim(theta, options)
+ma2_sim(theta, T)
 
 ma2_sum(x)
 
@@ -18,19 +18,13 @@ ma2_prior(theta)
 \arguments{
 \item{theta}{A vector of proposed model parameters, \eqn{\theta_1} and \eqn{\theta_2}}
 
-\item{options}{A list of options for simulating data from the model. For this example, the list contains only \eqn{T}, the number of observations.}
+\item{T}{The number of observations.}
 
 \item{x}{Observed or simulated data in the format of a vector of length \eqn{T}.}
 }
 \description{
 In this example we wish to estimate the parameters of a simple MA(2) time series model.
 We provide the data and tuning parameters required to reproduce the results in An et al. (2018).
-
-The function \code{ma2_sim(theta,options)} simulates an MA(2) time series.
-
-The function \code{ma2_sum(x)} returns the summary statistics for a given data set. Since the summary statistics are the data, this function simply returns the data.
-
-\code{ma2_prior(theta)} evaluates the (unnormalised) prior, which is uniform subject to several restrictions related to invertibility of the time series.
 }
 \details{
 This example is based on estimating the parameters of a basic MA(2) time series model
@@ -62,78 +56,69 @@ BSLasso can be found in An et al. (2018).
 }
 
 \examples{
-\dontshow{ 
+\donttest{
 # Loading the data for this example
 data(ma2)
 true_ma2 <- c(0.6,0.2)
 
-# Performing BSL
-resultMa2BSL <- bsl(y = ma2$data, n = 300, M = 5, start = ma2$start, cov_rw = ma2$cov,
-                 fn_sim = ma2_sim, fn_sum = ma2_sum, fn_prior = ma2_prior,
-                 sim_options = ma2$sim_options, theta_names = c('theta1', 'theta2'),
-                 verbose = FALSE)
+# Performing BSL (reduce the number of iterations M if desired)
+resultMa2BSL <- bsl(y = ma2$data, n = 500, M = 300000, theta0 = ma2$start, covRandWalk = ma2$cov,
+    fnSim = ma2_sim, fnSum = ma2_sum, fnPrior = ma2_prior, simArgs = ma2$sim_options,
+    thetaNames = expression(theta[1], theta[2]), verbose = TRUE)
+show(resultMa2BSL)
 summary(resultMa2BSL)
-plot(resultMa2BSL, true_value = true_ma2, thin = 1)
+plot(resultMa2BSL, which = 1, thetaTrue = true_ma2, thin = 20)
 
-# Performing tuning for BSLasso 
-lambda_all <- list(exp(seq(-3,0.5,length.out=2)), exp(seq(-4,-0.5,length.out=2)))
-
-sp_ma2 <- selectPenalty(ssy = ma2_sum(ma2$data), n = c(50, 150), lambda_all,
-                 theta = true_ma2, M = 5, sigma = 1.5, fn_sim = ma2_sim,
-                 fn_sum = ma2_sum, sim_options = ma2$sim_options,
-                 verbose = FALSE)
-sp_ma2
-plot(sp_ma2)
-
-# Performing BSLasso with a fixed penalty
-resultMa2BSLasso <- bsl(y = ma2$data, n = 150, M = 5, start = ma2$start, cov_rw = ma2$cov,
-                 fn_sim = ma2_sim, fn_sum = ma2_sum, penalty = 0.027, fn_prior = ma2_prior,
-                 sim_options = ma2$sim_options, theta_names = c('theta1', 'theta2'),
-                 verbose = FALSE)
-summary(resultMa2BSLasso)
-plot(resultMa2BSLasso, true_value = true_ma2, thin = 1)
-
-# Plotting the results together for comparison
-combinePlotsBSL(resultMa2BSL, resultMa2BSLasso, true_value = true_ma2, thin = 1)
-}
-\dontrun{ 
-# Loading the data for this example
-data(ma2)
-true_ma2 <- c(0.6,0.2)
-
-# Performing BSL
-resultMa2BSL <- bsl(y = ma2$data, n = 500, M = 300000, start = ma2$start, cov_rw = ma2$cov,
-                 fn_sim = ma2_sim, fn_sum = ma2_sum, fn_prior = ma2_prior,
-                 sim_options = ma2$sim_options, theta_names = c('theta1', 'theta2'))
-summary(resultMa2BSL)
-plot(resultMa2BSL, true_value = true_ma2, thin = 20)
-
-# Performing tuning for BSLasso 
-lambda_all <- list(exp(seq(-3,0.5,length.out=20)), exp(seq(-4,-0.5,length.out=20)), 
-                 exp(seq(-5.5,-1.5,length.out=20)), exp(seq(-7,-2,length.out=20)))
-
+# Performing tuning for BSLasso
+lambda_all <- list(exp(seq(-3,0.5,length.out=20)), exp(seq(-4,-0.5,length.out=20)),
+                   exp(seq(-5.5,-1.5,length.out=20)), exp(seq(-7,-2,length.out=20)))
 sp_ma2 <- selectPenalty(ssy = ma2_sum(ma2$data), n = c(50, 150, 300, 500), lambda_all,
-                 theta = true_ma2, M = 100, sigma = 1.5, fn_sim = ma2_sim,
-                 fn_sum = ma2_sum, sim_options = ma2$sim_options)
+                        theta = true_ma2, M = 100, sigma = 1.5, fnSim = ma2_sim,
+                        fnSum = ma2_sum, simArgs = ma2$sim_options)
 sp_ma2
 plot(sp_ma2)
 
-# Performing BSLasso with a fixed penalty
-resultMa2BSLasso <- bsl(y = ma2$data, n = 300, M = 250000, start = ma2$start, cov_rw = ma2$cov,
-                 fn_sim = ma2_sim, fn_sum = ma2_sum, penalty = 0.027, fn_prior = ma2_prior,
-                 sim_options = ma2$sim_options, theta_names = c('theta1', 'theta2'))
+# Performing BSLasso with a fixed penalty (reduce the number of iterations M if desired)
+resultMa2BSLasso <- bsl(y = ma2$data, n = 300, M = 250000, theta0 = ma2$start, covRandWalk=ma2$cov,
+    fnSim = ma2_sim, fnSum = ma2_sum, shrinkage = 'glasso', penalty = 0.027, fnPrior = ma2_prior,
+    simArgs = ma2$sim_options, thetaNames = expression(theta[1], theta[2]), verbose = TRUE)
+show(resultMa2BSLasso)
 summary(resultMa2BSLasso)
-plot(resultMa2BSLasso, true_value = true_ma2, thin = 20)
+plot(resultMa2BSLasso, which = 1, thetaTrue = true_ma2, thin = 20)
+
+# Performing semiBSL (reduce the number of iterations M if desired)
+resultMa2SemiBSL <- bsl(y = ma2$data, n = 500, M = 300000, theta0 = ma2$start, covRandWalk=ma2$cov,
+                        fnSim = ma2_sim, fnSum = ma2_sum, method = 'semiBSL', fnPrior = ma2_prior,
+                        simArgs = ma2$sim_options, thetaNames = expression(theta[1], theta[2]),
+                        verbose = TRUE)
+show(resultMa2SemiBSL)
+summary(resultMa2SemiBSL)
+plot(resultMa2SemiBSL, which = 1, thetaTrue = true_ma2, thin = 20)
 
 # Plotting the results together for comparison
-combinePlotsBSL(resultMa2BSL, resultMa2BSLasso, true_value = true_ma2, thin = 20)
+# plot using the R default plot function
+par(mar = c(5, 4, 1, 2), oma = c(0, 1, 2, 0))
+combinePlotsBSL(list(resultMa2BSL, resultMa2BSLasso, resultMa2SemiBSL), which = 1,
+    thetaTrue = true_ma2, thin = 20, label = c('bsl', 'bslasso', 'semiBSL'),
+    col = c('red', 'blue', 'green'), lty = 2:4, lwd = 1)
+mtext('Approximate Univariate Posteriors', outer = TRUE, cex = 1.5)
+
+# plot using the ggplot2 package
+combinePlotsBSL(list(resultMa2BSL, resultMa2BSLasso, resultMa2SemiBSL), which = 2,
+    thetaTrue = true_ma2, thin = 20, label = c('bsl   ', 'bslasso   ', 'semiBSL'),
+    options.color = list(values=c('red', 'blue', 'green')),
+    options.linetype = list(values = 2:4), options.size = list(values = rep(1, 3)),
+    options.theme = list(plot.margin = grid::unit(rep(0.03,4), "npc"),
+    axis.title = ggplot2::element_text(size=12), axis.text = ggplot2::element_text(size = 8),
+    legend.text = ggplot2::element_text(size = 12)))
 }
 
 }
 \references{
-An, Z., South, L. F., Nott, D. J. &  Drovandi, C. C. (2018). Accelerating
-Bayesian synthetic likelihood with the graphical lasso. \url{https://eprints.qut.edu.au/102263/}
+An, Z., South, L. F., Nott, D. J. &  Drovandi, C. C. (2018). Accelerating Bayesian synthetic
+likelihood with the graphical lasso. Journal of Computational and Graphical Statistics.
+\url{https://doi.org/10.1080/10618600.2018.1537928}
 }
 \author{
-Ziwen An, Christopher C. Drovandi and Leah F. South
+Ziwen An, Leah F. South and Christopher C. Drovandi
 }

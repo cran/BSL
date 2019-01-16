@@ -7,34 +7,29 @@
 \alias{mgnk_sum}
 \title{The multivariate G&K example}
 \usage{
-mgnk_sim(theta_tilde, sim_options)
+mgnk_sim(theta_tilde, T, J, bound)
 
 mgnk_sum(y)
 }
 \arguments{
 \item{theta_tilde}{A vector with 15 elements for the proposed model parameters.}
 
-\item{sim_options}{A list of options for simulating data from the model. For this example, the list contains
-\itemize{
-\item \code{T}: The number of observations in the data.
-\item \code{J}: The number of variables in the data.
-\item \code{bound}: A matrix of boundaries for the uniform prior.
-}}
+\item{T}{The number of observations in the data.}
+
+\item{J}{The number of variables in the data.}
+
+\item{bound}{A matrix of boundaries for the uniform prior.}
 
 \item{y}{A \code{T} \eqn{x} \code{J} matrix of data.}
 }
 \description{
 Here we provide the data and tuning parameters required to reproduce
 the results from the multivariate G & K (Drovandi and Pettitt, 2011) example from An et al. (2018).
-
-The function \code{mgnk_sim(theta_tilde,sim_options)} simulates from the multivariate G & K model.
-
-The function \code{mgnk_sum(y)} calculates the summary statistics for the multivariate G & K example.
 }
 \details{
 It is not practical to give a reasonable explanation of this example through R documentation
 given the number of equations involved. We refer the reader to the BSLasso paper (An et al., 2018)
-at \url{https://eprints.qut.edu.au/102263/} for information on the model and summary statistic used in this example.
+at \url{https://doi.org/10.1080/10618600.2018.1537928} for information on the model and summary statistic used in this example.
 }
 \section{An example dataset}{
 
@@ -51,62 +46,104 @@ as in An et al. (2018).
 }
 
 \examples{
-\dontrun{
+\donttest{
 require(doParallel) # You can use a different package to set up the parallel backend
+require(MASS)
+require(elliplot)
 
 # Loading the data for this example
 data(mgnk)
 
+# Performing BSL (reduce the number of iterations M if desired)
 # Opening up the parallel pools using doParallel
-cl <- makeCluster(detectCores())
+cl <- makeCluster(detectCores() - 1)
 registerDoParallel(cl)
-
-# Performing BSL
-resultMgnkBSL <- bsl(mgnk$data, n = 60, M = 80000, start = mgnk$start, cov_rw = mgnk$cov,
-                 fn_sim = mgnk_sim, fn_sum = mgnk_sum, sim_options = mgnk$sim_options, 
-                 parallel = TRUE, parallel_packages = c('BSL', 'MASS', 'elliplot'),
-                 theta_names = c('a1','b1','g1','k1','a2','b2','g2','k2','a3','b3','g3','k3'
-                 ,'delta12','delta13','delta23'))
+resultMgnkBSL <- bsl(mgnk$data, n = 60, M = 80000, theta0 = mgnk$start, covRandWalk = mgnk$cov,
+    fnSim = mgnk_sim, fnSum = mgnk_sum, simArgs = mgnk$sim_options,
+    parallel = TRUE, parallelArgs = list(.packages = c('BSL', 'MASS'), .export = 'ninenum'),
+    thetaNames = expression(a[1],b[1],g[1],k[1],a[2],b[2],g[2],k[2],a[3],b[3],g[3],k[3],
+        delta[12],delta[13],delta[23]), verbose = TRUE)
+stopCluster(cl)
+registerDoSEQ()
+show(resultMgnkBSL)
 summary(resultMgnkBSL)
-plot(resultMgnkBSL, thin = 20)
+plot(resultMgnkBSL, which = 2, thin = 20)
 
 # Performing tuning for BSLasso
-lambda_all <- list(exp(seq(-2.5,0.5,length.out=20)), exp(seq(-2.5,0.5,length.out=20)), 
+lambda_all <- list(exp(seq(-2.5,0.5,length.out=20)), exp(seq(-2.5,0.5,length.out=20)),
                    exp(seq(-4,-0.5,length.out=20)), exp(seq(-5,-2,length.out=20)))
 
+# Opening up the parallel pools using doParallel
+cl <- makeCluster(detectCores() - 1)
+registerDoParallel(cl)
 sp_mgnk <- selectPenalty(ssy = mgnk_sum(mgnk$data), n = c(15, 20, 30, 50), lambda_all,
-                 theta = mgnk$start, M = 100, sigma = 1.5, fn_sim = mgnk_sim, 
-                 fn_sum = mgnk_sum, sim_options = mgnk$sim_options, standardise = TRUE, 
-                 parallel_sim = TRUE, parallel_sim_packages = c('BSL', 'MASS', 'elliplot'),
-                 parallel_main = TRUE)
+    theta = mgnk$start, M = 100, sigma = 1.5, fnSim = mgnk_sim,
+    fnSum = mgnk_sum, simArgs = mgnk$sim_options, standardise = TRUE,
+    parallelSim = TRUE, parallelSimArgs = list(.packages = c('BSL', 'MASS'), .export = 'ninenum'),
+    parallelMain = TRUE)
+stopCluster(cl)
+registerDoSEQ()
 sp_mgnk
 plot(sp_mgnk)
 
-# Performing BSLasso with a fixed penalty
-resultMgnkBSLasso <- bsl(mgnk$data, n = 20, M = 80000, start = mgnk$start, cov_rw = mgnk$cov,
-                 fn_sim = mgnk_sim, fn_sum = mgnk_sum, sim_options = mgnk$sim_options,
-                 penalty = 0.3, standardise = TRUE, parallel = TRUE,
-                 parallel_packages = c('BSL', 'MASS', 'elliplot'),
-                 theta_names = c('a1','b1','g1','k1','a2','b2','g2','k2','a3','b3','g3','k3',
-                 'delta12','delta13','delta23'))
+# Performing BSLasso with a fixed penalty (reduce the number of iterations M if desired)
+# Opening up the parallel pools using doParallel
+cl <- makeCluster(detectCores() - 1)
+registerDoParallel(cl)
+resultMgnkBSLasso <- bsl(mgnk$data, n = 20, M = 80000, theta0 = mgnk$start, covRandWalk = mgnk$cov,
+     fnSim = mgnk_sim, fnSum = mgnk_sum, simArgs = mgnk$sim_options,
+     penalty = 0.3, standardise = TRUE, parallel = TRUE,
+     parallelArgs = list(.packages = c('BSL', 'MASS'), .export = 'ninenum'),
+     thetaNames = expression(a[1],b[1],g[1],k[1],a[2],b[2],g[2],k[2],a[3],b[3],g[3],k[3],
+         delta[12],delta[13],delta[23]), verbose = TRUE)
+stopCluster(cl)
+registerDoSEQ()
+show(resultMgnkBSLasso)
 summary(resultMgnkBSLasso)
-plot(resultMgnkBSLasso, thin = 20)
+plot(resultMgnkBSLasso, which = 2, thin = 20)
+
+
+# Performing semiBSL (reduce the number of iterations M if desired)
+# Opening up the parallel pools using doParallel
+cl <- makeCluster(detectCores() - 1)
+registerDoParallel(cl)
+resultMgnkSemiBSL <- bsl(mgnk$data, n = 60, M = 80000, theta0 = mgnk$start, covRandWalk = mgnk$cov,
+    fnSim = mgnk_sim, fnSum = mgnk_sum, simArgs = mgnk$sim_options, method = 'semiBSL',
+    parallel = TRUE, parallelArgs = list(.packages = c('BSL', 'MASS'), .export = 'ninenum'),
+    thetaNames = expression(a[1],b[1],g[1],k[1],a[2],b[2],g[2],k[2],a[3],b[3],g[3],k[3],
+        delta[12],delta[13],delta[23]), verbose = TRUE)
+stopCluster(cl)
+registerDoSEQ()
+show(resultMgnkSemiBSL)
+summary(resultMgnkSemiBSL)
+plot(resultMgnkSemiBSL, which = 2, thin = 20)
 
 # Plotting the results together for comparison
-combinePlotsBSL(resultMgnkBSL, resultMgnkBSLasso, thin = 20)
+# plot using the R default plot function
+par(mar = c(4, 4, 1, 1), oma = c(0, 1, 2, 0))
+combinePlotsBSL(list(resultMgnkBSL, resultMgnkBSLasso, resultMgnkSemiBSL), which = 1, thin = 20,
+    label = c('bsl', 'bslasso', 'semiBSL'), col = c('red', 'blue', 'green'), lty = 2:4, lwd = 1)
+mtext('Approximate Univariate Posteriors', outer = TRUE, line = 0.75, cex = 1.2)
 
-# Closing the parallel pools
-stopCluster(cl)
+# plot using the ggplot2 package
+combinePlotsBSL(list(resultMgnkBSL, resultMgnkBSLasso, resultMgnkSemiBSL), which = 2, thin = 20,
+    label=c('bsl   ','bslasso   ','semiBSL'),
+    options.color=list(values=c('red','blue','green')),
+    options.linetype = list(values = 2:4), options.size = list(values = rep(1, 3)),
+    options.theme = list(plot.margin = grid::unit(rep(0.03,4),"npc"),
+    axis.title = ggplot2::element_text(size=12), axis.text = ggplot2::element_text(size = 8),
+    legend.text = ggplot2::element_text(size = 12)))
 }
 
 }
 \references{
-An, Z., South, L. F., Nott, D. J. &  Drovandi, C. C. (2018). Accelerating
-Bayesian synthetic likelihood with the graphical lasso. \url{https://eprints.qut.edu.au/102263/}
+An, Z., South, L. F., Nott, D. J. &  Drovandi, C. C. (2018). Accelerating Bayesian synthetic
+likelihood with the graphical lasso. Journal of Computational and Graphical Statistics.
+\url{https://doi.org/10.1080/10618600.2018.1537928}
 
 Drovandi, C. C. and Pettitt, A. N. (2011). Likelihood-free Bayesian estimation of multivariate
 quantile distributions. Computational Statistics and Data Analysis, 55(9):2541-2556.
 }
 \author{
-Ziwen An, Christopher C. Drovandi and Leah F. South
+Ziwen An, Leah F. South and Christopher C. Drovandi
 }

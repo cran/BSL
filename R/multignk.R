@@ -4,18 +4,15 @@
 #' the results from the multivariate G & K (Drovandi and Pettitt, 2011) example from An et al. (2018).
 #'
 #' @param theta_tilde   A vector with 15 elements for the proposed model parameters.
-#' @param sim_options	A list of options for simulating data from the model. For this example, the list contains
-#' \itemize{
-#' \item \code{T}: The number of observations in the data.
-#' \item \code{J}: The number of variables in the data.
-#' \item \code{bound}: A matrix of boundaries for the uniform prior.
-#' }
+#' @param T             The number of observations in the data.
+#' @param J             The number of variables in the data.
+#' @param bound         A matrix of boundaries for the uniform prior.
 #' @param y				A \code{T} \eqn{x} \code{J} matrix of data.
-#' 
+#'
 #' @details
 #' It is not practical to give a reasonable explanation of this example through R documentation
 #' given the number of equations involved. We refer the reader to the BSLasso paper (An et al., 2018)
-#' at \url{https://eprints.qut.edu.au/102263/} for information on the model and summary statistic used in this example.
+#' at \url{https://doi.org/10.1080/10618600.2018.1537928} for information on the model and summary statistic used in this example.
 #'
 #' @section An example dataset:
 #'
@@ -30,63 +27,105 @@
 #' }
 #'
 #' @examples
-#' \dontrun{
+#' \donttest{
 #' require(doParallel) # You can use a different package to set up the parallel backend
-#' 
+#' require(MASS)
+#' require(elliplot)
+#'
 #' # Loading the data for this example
 #' data(mgnk)
-#' 
+#'
+#' # Performing BSL (reduce the number of iterations M if desired)
 #' # Opening up the parallel pools using doParallel
-#' cl <- makeCluster(detectCores())
+#' cl <- makeCluster(detectCores() - 1)
 #' registerDoParallel(cl)
-#' 
-#' # Performing BSL
-#' resultMgnkBSL <- bsl(mgnk$data, n = 60, M = 80000, start = mgnk$start, cov_rw = mgnk$cov,
-#'                  fn_sim = mgnk_sim, fn_sum = mgnk_sum, sim_options = mgnk$sim_options, 
-#'                  parallel = TRUE, parallel_packages = c('BSL', 'MASS', 'elliplot'),
-#'                  theta_names = c('a1','b1','g1','k1','a2','b2','g2','k2','a3','b3','g3','k3'
-#'                  ,'delta12','delta13','delta23'))
+#' resultMgnkBSL <- bsl(mgnk$data, n = 60, M = 80000, theta0 = mgnk$start, covRandWalk = mgnk$cov,
+#'     fnSim = mgnk_sim, fnSum = mgnk_sum, simArgs = mgnk$sim_options,
+#'     parallel = TRUE, parallelArgs = list(.packages = c('BSL', 'MASS'), .export = 'ninenum'),
+#'     thetaNames = expression(a[1],b[1],g[1],k[1],a[2],b[2],g[2],k[2],a[3],b[3],g[3],k[3],
+#'         delta[12],delta[13],delta[23]), verbose = TRUE)
+#' stopCluster(cl)
+#' registerDoSEQ()
+#' show(resultMgnkBSL)
 #' summary(resultMgnkBSL)
-#' plot(resultMgnkBSL, thin = 20)
-#' 
+#' plot(resultMgnkBSL, which = 2, thin = 20)
+#'
 #' # Performing tuning for BSLasso
-#' lambda_all <- list(exp(seq(-2.5,0.5,length.out=20)), exp(seq(-2.5,0.5,length.out=20)), 
+#' lambda_all <- list(exp(seq(-2.5,0.5,length.out=20)), exp(seq(-2.5,0.5,length.out=20)),
 #'                    exp(seq(-4,-0.5,length.out=20)), exp(seq(-5,-2,length.out=20)))
-#' 
+#'
+#' # Opening up the parallel pools using doParallel
+#' cl <- makeCluster(detectCores() - 1)
+#' registerDoParallel(cl)
 #' sp_mgnk <- selectPenalty(ssy = mgnk_sum(mgnk$data), n = c(15, 20, 30, 50), lambda_all,
-#'                  theta = mgnk$start, M = 100, sigma = 1.5, fn_sim = mgnk_sim, 
-#'                  fn_sum = mgnk_sum, sim_options = mgnk$sim_options, standardise = TRUE, 
-#'                  parallel_sim = TRUE, parallel_sim_packages = c('BSL', 'MASS', 'elliplot'),
-#'                  parallel_main = TRUE)
+#'     theta = mgnk$start, M = 100, sigma = 1.5, fnSim = mgnk_sim,
+#'     fnSum = mgnk_sum, simArgs = mgnk$sim_options, standardise = TRUE,
+#'     parallelSim = TRUE, parallelSimArgs = list(.packages = c('BSL', 'MASS'), .export = 'ninenum'),
+#'     parallelMain = TRUE)
+#' stopCluster(cl)
+#' registerDoSEQ()
 #' sp_mgnk
 #' plot(sp_mgnk)
-#' 
-#' # Performing BSLasso with a fixed penalty
-#' resultMgnkBSLasso <- bsl(mgnk$data, n = 20, M = 80000, start = mgnk$start, cov_rw = mgnk$cov,
-#'                  fn_sim = mgnk_sim, fn_sum = mgnk_sum, sim_options = mgnk$sim_options,
-#'                  penalty = 0.3, standardise = TRUE, parallel = TRUE,
-#'                  parallel_packages = c('BSL', 'MASS', 'elliplot'),
-#'                  theta_names = c('a1','b1','g1','k1','a2','b2','g2','k2','a3','b3','g3','k3',
-#'                  'delta12','delta13','delta23'))
-#' summary(resultMgnkBSLasso)
-#' plot(resultMgnkBSLasso, thin = 20)
-#' 
-#' # Plotting the results together for comparison
-#' combinePlotsBSL(resultMgnkBSL, resultMgnkBSLasso, thin = 20)
-#' 
-#' # Closing the parallel pools
+#'
+#' # Performing BSLasso with a fixed penalty (reduce the number of iterations M if desired)
+#' # Opening up the parallel pools using doParallel
+#' cl <- makeCluster(detectCores() - 1)
+#' registerDoParallel(cl)
+#' resultMgnkBSLasso <- bsl(mgnk$data, n = 20, M = 80000, theta0 = mgnk$start, covRandWalk = mgnk$cov,
+#'      fnSim = mgnk_sim, fnSum = mgnk_sum, simArgs = mgnk$sim_options,
+#'      penalty = 0.3, standardise = TRUE, parallel = TRUE,
+#'      parallelArgs = list(.packages = c('BSL', 'MASS'), .export = 'ninenum'),
+#'      thetaNames = expression(a[1],b[1],g[1],k[1],a[2],b[2],g[2],k[2],a[3],b[3],g[3],k[3],
+#'          delta[12],delta[13],delta[23]), verbose = TRUE)
 #' stopCluster(cl)
+#' registerDoSEQ()
+#' show(resultMgnkBSLasso)
+#' summary(resultMgnkBSLasso)
+#' plot(resultMgnkBSLasso, which = 2, thin = 20)
+#'
+#'
+#' # Performing semiBSL (reduce the number of iterations M if desired)
+#' # Opening up the parallel pools using doParallel
+#' cl <- makeCluster(detectCores() - 1)
+#' registerDoParallel(cl)
+#' resultMgnkSemiBSL <- bsl(mgnk$data, n = 60, M = 80000, theta0 = mgnk$start, covRandWalk = mgnk$cov,
+#'     fnSim = mgnk_sim, fnSum = mgnk_sum, simArgs = mgnk$sim_options, method = 'semiBSL',
+#'     parallel = TRUE, parallelArgs = list(.packages = c('BSL', 'MASS'), .export = 'ninenum'),
+#'     thetaNames = expression(a[1],b[1],g[1],k[1],a[2],b[2],g[2],k[2],a[3],b[3],g[3],k[3],
+#'         delta[12],delta[13],delta[23]), verbose = TRUE)
+#' stopCluster(cl)
+#' registerDoSEQ()
+#' show(resultMgnkSemiBSL)
+#' summary(resultMgnkSemiBSL)
+#' plot(resultMgnkSemiBSL, which = 2, thin = 20)
+#'
+#' # Plotting the results together for comparison
+#' # plot using the R default plot function
+#' par(mar = c(4, 4, 1, 1), oma = c(0, 1, 2, 0))
+#' combinePlotsBSL(list(resultMgnkBSL, resultMgnkBSLasso, resultMgnkSemiBSL), which = 1, thin = 20,
+#'     label = c('bsl', 'bslasso', 'semiBSL'), col = c('red', 'blue', 'green'), lty = 2:4, lwd = 1)
+#' mtext('Approximate Univariate Posteriors', outer = TRUE, line = 0.75, cex = 1.2)
+#'
+#' # plot using the ggplot2 package
+#' combinePlotsBSL(list(resultMgnkBSL, resultMgnkBSLasso, resultMgnkSemiBSL), which = 2, thin = 20,
+#'     label=c('bsl   ','bslasso   ','semiBSL'),
+#'     options.color=list(values=c('red','blue','green')),
+#'     options.linetype = list(values = 2:4), options.size = list(values = rep(1, 3)),
+#'     options.theme = list(plot.margin = grid::unit(rep(0.03,4),"npc"),
+#'     axis.title = ggplot2::element_text(size=12), axis.text = ggplot2::element_text(size = 8),
+#'     legend.text = ggplot2::element_text(size = 12)))
 #' }
-#' 
-#' @references 
-#' An, Z., South, L. F., Nott, D. J. &  Drovandi, C. C. (2018). Accelerating
-#' Bayesian synthetic likelihood with the graphical lasso. \url{https://eprints.qut.edu.au/102263/}
+#'
+#' @references
+#' An, Z., South, L. F., Nott, D. J. &  Drovandi, C. C. (2018). Accelerating Bayesian synthetic
+#' likelihood with the graphical lasso. Journal of Computational and Graphical Statistics.
+#' \url{https://doi.org/10.1080/10618600.2018.1537928}
 #'
 #' Drovandi, C. C. and Pettitt, A. N. (2011). Likelihood-free Bayesian estimation of multivariate
 #' quantile distributions. Computational Statistics and Data Analysis, 55(9):2541-2556.
-#' 
-#' @author 								Ziwen An, Christopher C. Drovandi and Leah F. South
-#' 
+#'
+#' @author 								Ziwen An, Leah F. South and Christopher C. Drovandi
+#'
 #' @name mgnk
 #' @docType data
 NULL
@@ -117,19 +156,19 @@ backLogTransform <- function(x_tilde, bound) {
 reparaCorr <- function(theta_corr, J) {
     Sigma <- diag(J)
     count <- 1
-    
+
     for (i in 1 : (J-1)) {
         for (j in (i+1) : J) {
             Sigma[i, j] <- Sigma[j, i] <- theta_corr[count]
             count <- count + 1
         }
     }
-    
+
     L <- t(chol(Sigma))
     gamma <- matrix(0, J, J)
     w <- numeric(choose(J, 2))
     count <- 1
-    
+
     for (i in 2 : J) {
         gamma[i, 1] <- acos(L[i, 1])
     }
@@ -138,28 +177,28 @@ reparaCorr <- function(theta_corr, J) {
             gamma[i, j] <- acos((L[i, j]) / (prod(sin(gamma[i, 1:(j-1)]))))
         }
     }
-    
+
     for (i in 2 : J) {
         for (j in 1: (i-1)) {
             w[count] <- log(gamma[i, j] / (pi - gamma[i, j]))
             count <- count + 1
         }
     }
-    
+
     return(list(w = w, Sigma = Sigma))
 }
 
 backReparaCorr <- function(w, J) {
     G <- array(0, c(J, J))
     count <- 1
-    
+
     for (i in 2 : J) {
         for (j in 1 : (i-1)) {
             G[i, j] <- pi / (1 + exp(-w[count]))
             count <- count + 1
         }
     }
-    
+
     L <- array(0, c(J, J))
     L[1, 1] <- 1
     for (i in 2 : J) {
@@ -171,18 +210,18 @@ backReparaCorr <- function(w, J) {
             L[i, j] <- prod(sin(G[i, 1 : (j-1)])) * cos(G[i, j])
         }
     }
-    
+
     Sigma <- L %*% t(L)
     theta_corr <- numeric(choose(J, 2))
     count <- 1
-    
+
     for (i in 1 : (J - 1)) {
         for (j in (i + 1) : J) {
             theta_corr[count] <- Sigma[i, j]
             count <- count + 1
         }
     }
-    
+
     return(theta_corr)
 
 }
@@ -213,28 +252,29 @@ paraBackTransformGnk <- function(theta_tilde, J, bound) {
     return(theta)
 }
 
-#' The function \code{mgnk_sim(theta_tilde,sim_options)} simulates from the multivariate G & K model.
+#' The function \code{mgnk_sim} simulates from the multivariate G & K model.
 #' @rdname mgnk
-mgnk_sim <- function(theta_tilde, sim_options) {
-    theta <- paraBackTransformGnk(theta_tilde, sim_options$J, sim_options$bound)
-    if (sim_options$J == 1) {
+#' @export
+mgnk_sim <- function(theta_tilde, T, J, bound) {
+    theta <- paraBackTransformGnk(theta_tilde, J, bound)
+    if (J == 1) {
         theta_gnk <- theta
         Sigma <- 1
     } else {
-        theta_gnk <- head(theta, 4*sim_options$J)
-        theta_corr <- tail(theta, -4*sim_options$J)
-        
-        if (length(theta_corr) != choose(sim_options$J, 2)) {
+        theta_gnk <- head(theta, 4*J)
+        theta_corr <- tail(theta, -4*J)
+
+        if (length(theta_corr) != choose(J, 2)) {
             stop('wrong parameter length or dimension')
         }
-        
-        Sigma <- reparaCorr(theta_corr, sim_options$J)$Sigma
+
+        Sigma <- reparaCorr(theta_corr, J)$Sigma
     }
-    
-    y <- array(0, c(sim_options$T, sim_options$J))
-    zu <- mvrnorm(n = sim_options$T, mu = numeric(sim_options$J), Sigma = Sigma)
-    
-    for (i in 1 : sim_options$J) {
+
+    y <- array(0, c(T, J))
+    zu <- mvrnorm(n = T, mu = numeric(J), Sigma = Sigma)
+
+    for (i in 1 : J) {
         y[, i] <- qgnk(zu[, i], theta[4*(i-1) + 1], theta[4*(i-1) + 2], theta[4*(i-1) + 3], theta[4*(i-1) + 4])
     }
     return(y)
@@ -264,6 +304,7 @@ normScore <- function(x, y) {
 
 #' The function \code{mgnk_sum(y)} calculates the summary statistics for the multivariate G & K example.
 #' @rdname mgnk
+#' @export
 mgnk_sum <- function(y) {
     J <- ncol(y)
     ssxRobust <- c(apply(y, MARGIN = 2, FUN = summStatRobust))

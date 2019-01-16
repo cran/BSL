@@ -1,32 +1,43 @@
 Package: BSL
 Type: Package
-Title: Bayesian Synthetic Likelihood with Graphical Lasso
-Version: 0.1.1
-Date: 2018-03-23
+Title: Bayesian Synthetic Likelihood
+Version: 2.0.0
+Date: 2019-01-15
 Authors@R: c(person("Ziwen","An",role=c("aut","cre"),email="ziwen.an@hdr.qut.edu.au",comment = c(ORCID = "0000-0002-9947-5182")),
-            person("Christopher C.","Drovandi",role=c("ctb"),email="c.drovandi@qut.edu.au",comment = c(ORCID = "0000-0001-9222-8763")),
-            person("Leah F.","South",role=c("ctb"),email="leah.south@hdr.qut.edu.au",comment = c(ORCID = "0000-0002-5646-2963")))
+            person("Leah F.","South",role=c("aut"),email="leah.south@hdr.qut.edu.au",comment = c(ORCID = "0000-0002-5646-2963")),
+            person("Christopher C.","Drovandi",role=c("aut"),email="c.drovandi@qut.edu.au",comment = c(ORCID = "0000-0001-9222-8763")))
 Description: Bayesian synthetic likelihood (BSL, Price et al. (2018) <doi:10.1080/10618600.2017.1302882>)
- is an alternative to standard, non-parametric approximate Bayesian computation (ABC). BSL assumes a
- multivariate normal distribution for the summary statistic likelihood and it is suitable when
- the distribution of the model summary statistics is sufficiently regular. This package provides
- a Metropolis Hastings Markov chain Monte Carlo implementation of BSL and
- BSL with graphical lasso (BSLasso, An et al. (2018) <https://eprints.qut.edu.au/102263/>),
- which is computationally more efficient when the dimension of the summary statistic is high.
- Extensions to this package are planned.
+    is an alternative to standard, non-parametric approximate Bayesian 
+	computation (ABC). BSL assumes a multivariate normal distribution 
+	for the summary statistic likelihood and it is suitable when the 
+	distribution of the model summary statistics is sufficiently regular. 
+	This package provides a Metropolis Hastings Markov chain Monte Carlo 
+	implementation of BSL, BSLasso and semiBSL. BSL with graphical lasso 
+	(BSLasso, An et al. (2018) <https://eprints.qut.edu.au/102263/>) is 
+    computationally more efficient when the dimension of the summary statistic 
+	is high. A semi-parametric version of BSL (semiBSL, An et al. (2018) 
+	<arXiv:1809.05800>) is more robust to non-normal summary 
+	statistics. Extensions to this package are planned.
+Depends: R (>= 3.4.0)
 License: GPL (>= 2)
 LazyLoad: yes
-Imports: glasso, ggplot2, stats, MASS, cvTools, grid, gridExtra,
-        foreach, coda, utils
-Suggests: elliplot
+Imports: glasso, ggplot2, MASS, mvtnorm, copula, cvTools, graphics,
+        gridExtra, foreach, coda, Rcpp, methods
+Suggests: elliplot, doParallel
 LinkingTo: Rcpp, RcppArmadillo
 LazyData: true
-RoxygenNote: 6.0.1
+RoxygenNote: 6.1.1
+Encoding: UTF-8
+Collate: 'BSL_package.R' 'RcppExports.R' 'S3_penbsl.R' 'S4Functions.R'
+        'S4.R' 'bsl.R' 'cell.R' 'combinePlotsBSL.R' 'covWarton.R'
+        'gaussianSynLike.R' 'glasso_cv.R' 'imports.R' 'kernelCDF.R'
+        'logitTransform.R' 'ma2.R' 'multignk.R' 'selectPenalty.R'
+        'semiparaKernelEstimate.R'
 NeedsCompilation: yes
-Packaged: 2018-03-23 02:39:35 UTC; n8001626
+Packaged: 2019-01-16 06:58:08 UTC; n9790349
 Author: Ziwen An [aut, cre] (<https://orcid.org/0000-0002-9947-5182>),
-  Christopher C. Drovandi [ctb] (<https://orcid.org/0000-0001-9222-8763>),
-  Leah F. South [ctb] (<https://orcid.org/0000-0002-5646-2963>)
+  Leah F. South [aut] (<https://orcid.org/0000-0002-5646-2963>),
+  Christopher C. Drovandi [aut] (<https://orcid.org/0000-0001-9222-8763>)
 Maintainer: Ziwen An <ziwen.an@hdr.qut.edu.au>
 Repository: CRAN
-Date/Publication: 2018-03-23 14:14:53 UTC
+Date/Publication: 2019-01-16 08:40:19 UTC
