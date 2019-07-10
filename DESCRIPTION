@@ -1,8 +1,8 @@
 Package: BSL
 Type: Package
 Title: Bayesian Synthetic Likelihood
-Version: 2.0.0
-Date: 2019-01-15
+Version: 3.0.0
+Date: 2019-07-01
 Authors@R: c(person("Ziwen","An",role=c("aut","cre"),email="ziwen.an@hdr.qut.edu.au",comment = c(ORCID = "0000-0002-9947-5182")),
             person("Leah F.","South",role=c("aut"),email="leah.south@hdr.qut.edu.au",comment = c(ORCID = "0000-0002-5646-2963")),
             person("Christopher C.","Drovandi",role=c("aut"),email="c.drovandi@qut.edu.au",comment = c(ORCID = "0000-0001-9222-8763")))
@@ -12,32 +12,37 @@ Description: Bayesian synthetic likelihood (BSL, Price et al. (2018) <doi:10.108
 	for the summary statistic likelihood and it is suitable when the 
 	distribution of the model summary statistics is sufficiently regular. 
 	This package provides a Metropolis Hastings Markov chain Monte Carlo 
-	implementation of BSL, BSLasso and semiBSL. BSL with graphical lasso 
-	(BSLasso, An et al. (2018) <https://eprints.qut.edu.au/102263/>) is 
-    computationally more efficient when the dimension of the summary statistic 
-	is high. A semi-parametric version of BSL (semiBSL, An et al. (2018) 
-	<arXiv:1809.05800>) is more robust to non-normal summary 
-	statistics. Extensions to this package are planned.
+	implementation of three methods (BSL, uBSL and semiBSL) and two 
+	shrinkage estimations (graphical lasso and Warton's estimation).
+	uBSL (Price et al. (2018) <doi:10.1080/10618600.2017.1302882>) uses 
+	an unbiased estimator to the normal density. A semi-parametric version 
+	of BSL (semiBSL, An et al. (2018) <arXiv:1809.05800>) is more robust 
+	to non-normal summary statistics. Shrinkage estimations can help to 
+	bring down the number of simulations when the dimension of the summary 
+	statistic is high (e.g., BSLasso, An et al. (2019) 
+	<doi:10.1080/10618600.2018.1537928>). Extensions to this package are 
+	planned.
 Depends: R (>= 3.4.0)
 License: GPL (>= 2)
 LazyLoad: yes
-Imports: glasso, ggplot2, MASS, mvtnorm, copula, cvTools, graphics,
-        gridExtra, foreach, coda, Rcpp, methods
+Imports: glasso, ggplot2, MASS, mvtnorm, copula, graphics, gridExtra,
+        foreach, coda, Rcpp, methods
 Suggests: elliplot, doParallel
 LinkingTo: Rcpp, RcppArmadillo
 LazyData: true
 RoxygenNote: 6.1.1
 Encoding: UTF-8
-Collate: 'BSL_package.R' 'RcppExports.R' 'S3_penbsl.R' 'S4Functions.R'
-        'S4.R' 'bsl.R' 'cell.R' 'combinePlotsBSL.R' 'covWarton.R'
-        'gaussianSynLike.R' 'glasso_cv.R' 'imports.R' 'kernelCDF.R'
+Collate: 'BSL_model.R' 'BSL_package.R' 'RcppExports.R' 'S3_penbsl.R'
+        'S4Functions.R' 'S4.R' 'bsl.R' 'cell.R' 'combinePlotsBSL.R'
+        'covWarton.R' 'gaussianRankCorr.R' 'gaussianSynLike.R'
+        'gaussianSynLikeGhuryeOlkin.R' 'imports.R' 'kernelCDF.R'
         'logitTransform.R' 'ma2.R' 'multignk.R' 'selectPenalty.R'
         'semiparaKernelEstimate.R'
 NeedsCompilation: yes
-Packaged: 2019-01-16 06:58:08 UTC; n9790349
+Packaged: 2019-07-10 02:51:15 UTC; n9790349
 Author: Ziwen An [aut, cre] (<https://orcid.org/0000-0002-9947-5182>),
   Leah F. South [aut] (<https://orcid.org/0000-0002-5646-2963>),
   Christopher C. Drovandi [aut] (<https://orcid.org/0000-0001-9222-8763>)
 Maintainer: Ziwen An <ziwen.an@hdr.qut.edu.au>
 Repository: CRAN
-Date/Publication: 2019-01-16 08:40:19 UTC
+Date/Publication: 2019-07-10 07:30:29 UTC
