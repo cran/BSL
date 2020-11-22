@@ -7,24 +7,29 @@
 gaussianRankCorr(x, vec = FALSE)
 }
 \arguments{
-\item{x}{A numeric matrix representing data where the number of rows is the number of 
-independent data points and the number of columns are the number of variables in the dataset.}
+\item{x}{A numeric matrix representing data where the number of rows
+is the number of independent data points and the number of columns is the
+number of variables in the dataset.}
 
-\item{vec}{A logical argument indicating if the vector of correlations should be returned 
-instead of a matrix.}
+\item{vec}{A logical argument indicating if the vector of correlations
+should be returned instead of a matrix.}
 }
 \value{
-Gaussian rank correlation matrix (default) or a vector of pair correlations.
+Gaussian rank correlation matrix (default) or a vector of
+  pair correlations.
 }
 \description{
-This function computes the Gaussian rank correlation of Boudt et al. (2012).
+This function computes the Gaussian rank correlation of
+  \insertCite{Boudt2012;textual}{BSL}.
 }
 \examples{
 data(ma2)
+model <- newModel(fnSimVec = ma2_sim_vec, fnSum = ma2_sum, simArgs = list(T = 10),
+                  theta0 = ma2$start, fnLogPrior = ma2_prior)
 set.seed(100)
 
-# generate 1000 simualtions from the ma2 simulation function
-x <- t(replicate(1000, ma2_sim(ma2$start, 10)))
+# generate 1000 simualtions from the ma2 model
+x <- simulation(model, n = 1000, theta = c(0.6, 0.2))$x
 
 corr1 <- cor(x) # traditional correlation matrix
 corr2 <- gaussianRankCorr(x) # Gaussian rank correlation matrix
@@ -37,9 +42,9 @@ cor2cov(gaussianRankCorr(x), std) # convert to covariance matrix
 
 }
 \references{
-Boudt, K., Cornelissen, J., and Croux, C. (2012). The Gaussian rank correlation estimator: 
-robustness properties. Statistics and Computing, 22(2):471-483.
+\insertAllCited{}
 }
 \seealso{
-\code{\link{cor2cov}} for converting a correlation matrix to a covariance matrix.
+\code{\link{cor2cov}} for conversion from correlation matrix
+  to covariance matrix.
 }

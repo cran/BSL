@@ -1,6 +1,8 @@
-.onUnload <- function (libpath) { library.dynam.unload("BSL", libpath)}
+.onUnload <- function (libpath) {
+  library.dynam.unload("BSL", libpath)
+}
 
-#' @importFrom stats runif cov sd pnorm rnorm qnorm density approx
+#' @importFrom stats runif cov sd pnorm rnorm qnorm density approx dexp rexp median quantile
 #' @importFrom graphics par lines abline layout legend
 #' @importFrom utils flush.console capture.output head tail
 #' @importFrom MASS mvrnorm
@@ -14,6 +16,9 @@
 #' @importFrom grid unit unit.c grid.newpage grid.draw
 #' @importFrom gridExtra grid.arrange arrangeGrob
 #' @importFrom copula normalCopula p2P P2p dCopula
+#' @importFrom whitening whiteningMatrix
+#' @importFrom Rdpack reprompt
+#' @importFrom doRNG registerDoRNG
 #' @import methods
 NULL
 
