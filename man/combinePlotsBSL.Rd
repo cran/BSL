@@ -98,6 +98,9 @@ when \code{which} is \code{2L}.}
 \item{options.theme}{A list of additional arguments to pass into the
 \code{theme} function. Only use when \code{which} is \code{2L}.}
 }
+\value{
+No return value, called for the plots produced.
+}
 \description{
 The function \code{combinePlotsBSL} can be used to plot multiple
   BSL densities together, optionally with the true values for the parameters.

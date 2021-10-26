@@ -146,7 +146,7 @@ thetaExact <- c(0.35, 0.001)
 
 # Performing BSL (reduce the number of iterations M if desired)
 # Opening up the parallel pools using doParallel
-cl <- makeCluster(detectCores() - 1)
+cl <- makeCluster(min(detectCores() - 1,2))
 registerDoParallel(cl)
 resultCellBSL <- bsl(cell$data, n = 5000, M = 10000, model = model, covRandWalk = cell$cov,
                      parallel = TRUE, verbose = 1L)
@@ -158,7 +158,7 @@ plot(resultCellBSL, thetaTrue = thetaExact, thin = 20)
 
 # Performing uBSL (reduce the number of iterations M if desired)
 # Opening up the parallel pools using doParallel
-cl <- makeCluster(detectCores() - 1)
+cl <- makeCluster(min(detectCores() - 1,2))
 registerDoParallel(cl)
 resultCelluBSL <- bsl(cell$data, n = 5000, M = 10000, model = model, covRandWalk = cell$cov,
                       method = "uBSL", parallel = TRUE, verbose = 1L)
@@ -173,7 +173,7 @@ ssy <- cell_sum(cell$data, cell$sum_args$Yinit)
 lambda_all <- list(exp(seq(0.5,2.5,length.out=20)), exp(seq(0,2,length.out=20)),
                    exp(seq(-1,1,length.out=20)), exp(seq(-1,1,length.out=20)))
 # Opening up the parallel pools using doParallel
-cl <- makeCluster(detectCores() - 1)
+cl <- makeCluster(min(detectCores() - 1,2))
 registerDoParallel(cl)
 set.seed(100)
 sp_cell <- selectPenalty(ssy, n = c(500, 1000, 1500, 2000), lambda_all, theta = thetaExact,
@@ -186,7 +186,7 @@ plot(sp_cell)
 
 # Performing BSLasso with a fixed penalty (reduce the number of iterations M if desired)
 # Opening up the parallel pools using doParallel
-cl <- makeCluster(detectCores() - 1)
+cl <- makeCluster(min(detectCores() - 1,2))
 registerDoParallel(cl)
 resultCellBSLasso <- bsl(cell$data, n = 1500, M = 10000, model = model, covRandWalk = cell$cov, 
                          shrinkage = "glasso", penalty = 1.3, parallel = TRUE, verbose = 1L)
@@ -198,7 +198,7 @@ plot(resultCellBSLasso, thetaTrue = thetaExact, thin = 20)
 
 # Performing semiBSL (reduce the number of iterations M if desired)
 # Opening up the parallel pools using doParallel
-cl <- makeCluster(detectCores() - 1)
+cl <- makeCluster(min(detectCores() - 1,2))
 registerDoParallel(cl)
 resultCellSemiBSL <- bsl(cell$data, n = 5000, M = 10000, model = model, covRandWalk = cell$cov, 
                          method = "semiBSL", parallel = TRUE, verbose = 1L)
@@ -210,11 +210,13 @@ plot(resultCellSemiBSL, thetaTrue = thetaExact, thin = 20)
 
 # Plotting the results together for comparison
 # plot using the R default plot function
+oldpar <- par()
 par(mar = c(5, 4, 1, 2), oma = c(0, 1, 2, 0))
 combinePlotsBSL(list(resultCellBSL, resultCelluBSL, resultCellBSLasso, resultCellSemiBSL),
     which = 1, thetaTrue = thetaExact, thin = 20, label = c("bsl", "ubsl", "bslasso", "semiBSL"),
     col = 1:4, lty = 1:4, lwd = 1)
 mtext("Approximate Univariate Posteriors", outer = TRUE, cex = 1.5)
+par(mar = oldpar$mar, oma = oldpar$oma)
 
 }
 

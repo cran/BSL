@@ -8,20 +8,20 @@
 \usage{
 data(mgnk)
 
-mgnk_sim(theta_tilde, T, J, bound)
+mgnk_sim(theta_tilde, TT, J, bound)
 
 mgnk_sum(y)
 }
 \arguments{
 \item{theta_tilde}{A vector with 15 elements for the proposed model parameters.}
 
-\item{T}{The number of observations in the data.}
+\item{TT}{The number of observations in the data.}
 
 \item{J}{The number of variables in the data.}
 
 \item{bound}{A matrix of boundaries for the uniform prior.}
 
-\item{y}{A \code{T} \ifelse{html}{\out{&times}}{\eqn{\times}} \code{J} matrix of data.}
+\item{y}{A \code{TT} \ifelse{html}{\out{&times}}{\eqn{\times}} \code{J} matrix of data.}
 }
 \description{
 Here we provide the data and tuning parameters required to reproduce
@@ -30,12 +30,12 @@ the results from the multivariate G & K \insertCite{Drovandi2011}{BSL} example f
 \details{
 It is not practical to give a reasonable explanation of this example through R documentation
 given the number of equations involved. We refer the reader to the BSLasso paper \insertCite{An2019}{BSL}
-at \url{https://doi.org/10.1080/10618600.2018.1537928} for information on the model and summary statistic used in this example.
+at <doi:10.1080/10618600.2018.1537928> for information on the model and summary statistic used in this example.
 }
 \section{An example dataset}{
 
 
-We use the foreign currency exchange data available from \url{http://www.rba.gov.au/statistics/historical-data.html}
+We use the foreign currency exchange data available from \url{https://www.rba.gov.au/statistics/historical-data.html}
 as in \insertCite{An2019;textual}{BSL}.
 
 \itemize{
@@ -60,7 +60,7 @@ model <- newModel(fnSim = mgnk_sim, fnSum = mgnk_sum, simArgs = mgnk$sim_args, t
 
 # Performing BSL (reduce the number of iterations M if desired)
 # Opening up the parallel pools using doParallel
-cl <- makeCluster(detectCores() - 1)
+cl <- makeCluster(min(detectCores() - 1,2))
 registerDoParallel(cl)
 resultMgnkBSL <- bsl(mgnk$data, n = 60, M = 80000, model = model, covRandWalk = mgnk$cov,
     method = "BSL", parallel = FALSE, verbose = 1L, plotOnTheFly = TRUE)
@@ -72,7 +72,7 @@ plot(resultMgnkBSL, which = 2, thin = 20)
 
 # Performing uBSL (reduce the number of iterations M if desired)
 # Opening up the parallel pools using doParallel
-cl <- makeCluster(detectCores() - 1)
+cl <- makeCluster(min(detectCores() - 1,2))
 registerDoParallel(cl)
 resultMgnkuBSL <- bsl(mgnk$data, n = 60, M = 80000, model = model, covRandWalk = mgnk$cov,
     method = "uBSL", parallel = FALSE, verbose = 1L)
@@ -89,7 +89,7 @@ lambda_all <- list(exp(seq(-2.5,0.5,length.out=20)), exp(seq(-2.5,0.5,length.out
                    exp(seq(-4,-0.5,length.out=20)), exp(seq(-5,-2,length.out=20)))
 
 # Opening up the parallel pools using doParallel
-cl <- makeCluster(detectCores() - 1)
+cl <- makeCluster(min(detectCores() - 1,2))
 registerDoParallel(cl)
 set.seed(100)
 sp_mgnk <- selectPenalty(ssy, n = c(15, 20, 30, 50), lambda = lambda_all, theta = mgnk$start,
@@ -103,7 +103,7 @@ plot(sp_mgnk)
 
 # Performing BSLasso with a fixed penalty (reduce the number of iterations M if desired)
 # Opening up the parallel pools using doParallel
-cl <- makeCluster(detectCores() - 1)
+cl <- makeCluster(min(detectCores() - 1,2))
 registerDoParallel(cl)
 resultMgnkBSLasso <- bsl(mgnk$data, n = 20, M = 80000, model = model, covRandWalk = mgnk$cov,
     method = "BSL", shrinkage = "glasso", penalty = 0.3, standardise = TRUE, parallel = FALSE,
@@ -117,7 +117,7 @@ plot(resultMgnkBSLasso, which = 2, thin = 20)
 
 # Performing semiBSL (reduce the number of iterations M if desired)
 # Opening up the parallel pools using doParallel
-cl <- makeCluster(detectCores() - 1)
+cl <- makeCluster(min(detectCores() - 1,2))
 registerDoParallel(cl)
 resultMgnkSemiBSL <- bsl(mgnk$data, n = 60, M = 80000, model = model, covRandWalk = mgnk$cov,
     method = "semiBSL", parallel = FALSE, verbose = 1L)
@@ -129,6 +129,7 @@ plot(resultMgnkSemiBSL, which = 2, thin = 20)
 
 # Plotting the results together for comparison
 # plot using the R default plot function
+oldpar <- par()
 par(mar = c(4, 4, 1, 1), oma = c(0, 1, 2, 0))
 combinePlotsBSL(list(resultMgnkBSL, resultMgnkuBSL, resultMgnkBSLasso, resultMgnkSemiBSL),
                 which = 1, thin = 20, label = c("bsl", "ubsl", "bslasso", "semiBSL"),
@@ -143,6 +144,7 @@ combinePlotsBSL(list(resultMgnkBSL, resultMgnkuBSL, resultMgnkBSLasso, resultMgn
     options.theme = list(plot.margin = grid::unit(rep(0.03,4),"npc"),
         axis.title = ggplot2::element_text(size=12), axis.text = ggplot2::element_text(size = 8),
         legend.text = ggplot2::element_text(size = 12)))
+par(mar = oldpar$mar, oma = oldpar$oma)
 }
 
 }

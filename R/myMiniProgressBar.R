@@ -5,6 +5,7 @@
 #' @param txt2 String to put after the progress bar
 #' @param style The display style. 1 is single-lined; 2 is double-lined; 3 display the progress in a 5-lined block.
 #' @param label Character labels for "finished", "un-finished", and "side bars".
+#' @return No return value, called for side effects.
 #' @keywords internal
 myMiniProgressBar <- function(p, txt1 = '', txt2 = '', style = 1, label = c('=', '-', '|')) {
   stopifnot(style %in% c(1, 2, 3))

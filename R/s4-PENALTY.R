@@ -187,10 +187,12 @@ setMethod("plot",
           }
 )
 
+
 #' Obtain the selected penalty values from a "PENALTY" object
 #' @description see \code{\link{PENALTYclass}}
 #' @param object   A ``PENALTY'' class object.
 #' @param ... Other arguments.
+#' @return The selecty penalty values.
 setGeneric("getPenalty", function(object, ...) standardGeneric("getPenalty"))
 #' @rdname PENALTY-class
 #' @export

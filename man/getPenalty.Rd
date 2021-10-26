@@ -11,6 +11,9 @@ getPenalty(object, ...)
 
 \item{...}{Other arguments.}
 }
+\value{
+The selecty penalty values.
+}
 \description{
 see \code{\link{PENALTYclass}}
 }

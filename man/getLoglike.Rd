@@ -11,6 +11,9 @@ getLoglike(object, ...)
 
 \item{...}{Other arguments.}
 }
+\value{
+The vector of log likelihood evaluations, after removing burn-in and thinning.
+}
 \description{
 see \code{\link{BSLclass}}
 }

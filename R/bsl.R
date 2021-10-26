@@ -335,7 +335,8 @@ bsl <- function(y, n, M, model, covRandWalk, theta0, fnSim, fnSum, method = c("B
     if (plotOnTheFly == 1) {
       plotOnTheFly  <- 1000
     }
-    oldPar <- par()$mfrow
+    oldpar <- par(no.readonly = TRUE)    # get current user par settings
+    on.exit(par(oldpar))            # reset current user par settings at the end of the function
     a <- floor(sqrt(p))
     b <- ceiling(p/a)
     par(mfrow = c(a, b))
@@ -539,11 +540,7 @@ bsl <- function(y, n, M, model, covRandWalk, theta0, fnSim, fnSum, method = c("B
   earRate <- countEar/M
   errRate <- countErr/M
   time <- difftime(Sys.time(), startTime)
-  
-  if (plotOnTheFly) {
-    par(mfrow = oldPar)
-  }
-  
+    
   result <- new("BSL", theta = theta, loglike = loglike, call = cl, model = model,
                 acceptanceRate = accRate, earlyRejectionRate = earRate, errorRate = errRate,
                 y = y, n = n, M = M, covRandWalk = covRandWalk, method = method,

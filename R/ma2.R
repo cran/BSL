@@ -10,8 +10,8 @@
 #' @param n         The number of simulations to run with the vectorised
 #'   simulation function.
 #' @param x			Observed or simulated data in the format of a vector of length
-#'   \eqn{T}.
-#' @param T         The number of observations.
+#'   \eqn{TT}.
+#' @param TT         The number of observations.
 #' @param epsilon   The skewness parameter in the sinh-arcsinh transformation.
 #' @param delta   The kurtosis parameter in the sinh-arcsinh transformation.
 #'
@@ -23,8 +23,8 @@
 #'   &#952<sub>2</sub>z<sub>t-2</sub></i>,</center>}}{\deqn{y_t = z_t + \theta_1
 #'   z_{t-1} + \theta_2 z_{t-2},}}
 #'
-#'   where \eqn{t=1,\ldots,T} and \ifelse{html}{\out{<i>z<sub>t</sub> ~
-#'   N(0,1)</i>}}{\eqn{z_t \sim N(0,1)}} for \eqn{t=-1,0,\ldots,T}. A uniform
+#'   where \eqn{t=1,\ldots,TT} and \ifelse{html}{\out{<i>z<sub>t</sub> ~
+#'   N(0,1)</i>}}{\eqn{z_t \sim N(0,1)}} for \eqn{t=-1,0,\ldots,TT}. A uniform
 #'   prior is used for this example, subject to the restrictions that
 #'   \ifelse{html}{\out{-2<&#952<sub>1</sub><2}}{\eqn{-2<\theta_1<2}},
 #'   \ifelse{html}{\out{&#952<sub>1</sub>+&#952<sub>2</sub>>-1}}{\eqn{\theta_1+\theta_2>-1}}
@@ -40,16 +40,16 @@
 #'   simulated dataset with
 #'   \ifelse{html}{\out{&#952<sub>1</sub>=0.6}}{\eqn{\theta_1 = 0.6}},
 #'   \ifelse{html}{\out{&#952<sub>2</sub>=0.2}}{\eqn{\theta_2=0.2}} and
-#'   \eqn{T=50}. Further information about this model and the specific choices
+#'   \eqn{TT=50}. Further information about this model and the specific choices
 #'   of tuning parameters used in BSL and BSLasso can be found in An et al.
 #'   (2019).
 #'
 #'   \itemize{
 #'
 #'   \item \code{data}: A time series dataset, in the form of a vector of length
-#'   \eqn{T}
+#'   \eqn{TT}
 #'
-#'   \item \code{sim_args}: A list containing \eqn{T=50}
+#'   \item \code{sim_args}: A list containing \eqn{TT=50}
 #'
 #'
 #'   \item \code{start}: A vector of suitable initial values of the parameters
@@ -143,6 +143,7 @@
 #'
 #' # Plotting the results together for comparison
 #' # plot using the R default plot function
+#' oldpar <- par()
 #' par(mar = c(5, 4, 1, 2), oma = c(0, 1, 2, 0))
 #' combinePlotsBSL(list(resultMa2BSL, resultMa2uBSL, resultMa2BSLasso, resultMa2SemiBSL), which = 1,
 #'                 thetaTrue = thetaExact, thin = 20, label = c("bsl", "uBSL", "bslasso", "semiBSL"),
@@ -157,6 +158,7 @@
 #'     options.theme = list(plot.margin = grid::unit(rep(0.03,4), "npc"),
 #'         axis.title = ggplot2::element_text(size=12), axis.text = ggplot2::element_text(size = 8),
 #'         legend.text = ggplot2::element_text(size = 12)))
+#' par(mar = oldpar$mar, oma = oldpar$oma)
 #' }
 #'
 #' @references
@@ -171,19 +173,19 @@ NULL
 
 #' @describeIn ma2 Simulates an MA(2) time series.
 #' @export
-ma2_sim <- function(theta, T) {
-    rand <- rnorm(T + 2)
-    y <- rand[3 : (T+2)] + theta[1] * rand[2 : (T+1)] + theta[2] * rand[1 : T]
+ma2_sim <- function(theta, TT) {
+    rand <- rnorm(TT + 2)
+    y <- rand[3 : (TT+2)] + theta[1] * rand[2 : (TT+1)] + theta[2] * rand[1 : TT]
     return(y)
 }
 
 #' @describeIn ma2 Simulates n MA(2) time series with a vectorised simulation
 #'   function.
 #' @export
-ma2_sim_vec <- function(n, theta, T) {
-    rand <- matrix(rnorm(n * (T + 2)), n, T + 2)
-    y <- rand[, 3 : (T + 2)] + theta[1] * rand[, 2 : (T + 1)]
-    + theta[2] * rand[, 1 : T]
+ma2_sim_vec <- function(n, theta, TT) {
+    rand <- matrix(rnorm(n * (TT + 2)), n, TT + 2)
+    y <- rand[, 3 : (TT + 2)] + theta[1] * rand[, 2 : (TT + 1)]
+    + theta[2] * rand[, 1 : TT]
     return(y)
 }
 

@@ -24,7 +24,7 @@ This function computes the Gaussian rank correlation of
 }
 \examples{
 data(ma2)
-model <- newModel(fnSimVec = ma2_sim_vec, fnSum = ma2_sum, simArgs = list(T = 10),
+model <- newModel(fnSimVec = ma2_sim_vec, fnSum = ma2_sum, simArgs = list(TT = 10),
                   theta0 = ma2$start, fnLogPrior = ma2_prior)
 set.seed(100)
 
@@ -33,9 +33,11 @@ x <- simulation(model, n = 1000, theta = c(0.6, 0.2))$x
 
 corr1 <- cor(x) # traditional correlation matrix
 corr2 <- gaussianRankCorr(x) # Gaussian rank correlation matrix
+oldpar <- par()
 par(mfrow = c(1, 2))
 image(corr1, main = 'traditional correlation matrix')
 image(corr2, main = 'Gaussian rank correlation matrix')
+par(mfrow = oldpar$mfrow)
 
 std <- apply(x, MARGIN = 2, FUN = sd) # standard deviations
 cor2cov(gaussianRankCorr(x), std) # convert to covariance matrix

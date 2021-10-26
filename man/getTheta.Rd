@@ -11,6 +11,9 @@ getTheta(object, ...)
 
 \item{...}{Other arguments.}
 }
+\value{
+The matrix of samples, after removing burn-in and thinning.
+}
 \description{
 see \code{\link{BSLclass}}
 }

@@ -295,6 +295,8 @@ marginalPostDefault <- function(x, thin = 1, burnin = 0, thetaTrue = NULL, optio
         stop('Length of thetaTrue does not match the number of parameters.')
     }
     thetaNames <- x@model@thetaNames
+    oldpar <- par(no.readonly = TRUE)    # get current user par settings
+    on.exit(par(oldpar))            # reset current user par settings at the end of the function
     par(mfrow = c(a, b))
     for(k in 1:p) {
         d <- density(theta[, k])
@@ -307,7 +309,6 @@ marginalPostDefault <- function(x, thin = 1, burnin = 0, thetaTrue = NULL, optio
             abline(v = thetaTrue[k], col = 'forestgreen', lty = 3)
         }
     }
-    par(mfrow = c(1,1))
 }
 
 # Plot the univariate marginal posterior plot of a bsl class object using the
@@ -342,6 +343,7 @@ marginalPostGgplot <- function(x, thin = 1, burnin = 0, thetaTrue = NULL, top = 
 #' @description see \code{\link{BSLclass}}
 #' @param object   A ``BSL'' class object.
 #' @param ... Other arguments.
+#' @return The matrix of samples, after removing burn-in and thinning.
 setGeneric("getTheta", function(object, ...) standardGeneric("getTheta"))
 #' @rdname BSL-class
 #' @export
@@ -356,6 +358,7 @@ setMethod("getTheta",
 #' @description see \code{\link{BSLclass}}
 #' @param object   A ``BSL'' class object.
 #' @param ... Other arguments.
+#' @return The vector of log likelihood evaluations, after removing burn-in and thinning.
 setGeneric("getLoglike", function(object, ...) standardGeneric("getLoglike"))
 #' @rdname BSL-class
 #' @export
@@ -371,6 +374,8 @@ setMethod("getLoglike",
 #' @description see \code{\link{BSLclass}}
 #' @param object   A ``BSL'' class object.
 #' @param ... Other arguments.
+#' @return The matrix of gamma samples (the latent parameters for BSLmisspec
+#' method), after removing burn-in and thinning.
 setGeneric("getGamma", function(object, ...) standardGeneric("getGamma"))
 #' @rdname BSL-class
 #' @export

@@ -6,6 +6,11 @@
 
 using namespace Rcpp;
 
+#ifdef RCPP_USE_GLOBAL_ROSTREAM
+Rcpp::Rostream<true>&  Rcpp::Rcout = Rcpp::Rcpp_cout_get();
+Rcpp::Rostream<false>& Rcpp::Rcerr = Rcpp::Rcpp_cerr_get();
+#endif
+
 // simulate_cell
 arma::ucube simulate_cell(LogicalMatrix x, IntegerVector rows, IntegerVector cols, double Pm, double Pp, int sim_iters, int num_obs);
 RcppExport SEXP _BSL_simulate_cell(SEXP xSEXP, SEXP rowsSEXP, SEXP colsSEXP, SEXP PmSEXP, SEXP PpSEXP, SEXP sim_itersSEXP, SEXP num_obsSEXP) {

@@ -17,6 +17,9 @@ myMiniProgressBar(p, txt1 = "", txt2 = "", style = 1, label = c("=", "-", "|"))
 
 \item{label}{Character labels for "finished", "un-finished", and "side bars".}
 }
+\value{
+No return value, called for side effects.
+}
 \description{
 Print a customisable progress bar in the console.
 }

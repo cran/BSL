@@ -134,7 +134,7 @@ paraBound <- matrix(c(1,2,0,100,0,0.9), 3, 2, byrow = TRUE)
 
 # Performing BSL (reduce the number of iterations M if desired)
 # Opening up the parallel pools using doParallel
-cl <- makeCluster(detectCores() - 1)
+cl <- makeCluster(min(detectCores() - 1,2))
 registerDoParallel(cl)
 resultToadSimulated <- bsl(toad$data_simulated, n = 1000, M = 10000, model = model1,
                            covRandWalk = toad$cov, logitTransformBound = paraBound,
@@ -153,7 +153,7 @@ paraBound <- matrix(c(1,2,0,100,0,0.9), 3, 2, byrow = TRUE)
 
 # Performing BSL (reduce the number of iterations M if desired)
 # Opening up the parallel pools using doParallel
-cl <- makeCluster(detectCores() - 1)
+cl <- makeCluster(min(detectCores() - 1,2))
 registerDoParallel(cl)
 resultToadReal <- bsl(toad$data_real, n = 1000, M = 10000, model = model2,
                       covRandWalk = toad$cov, logitTransformBound = paraBound,

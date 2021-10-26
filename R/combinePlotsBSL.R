@@ -45,6 +45,8 @@
 #'   \code{2L}.
 #' @inheritParams BSL-class
 #'
+#' @return No return value, called for the plots produced.
+#'
 #' @examples
 #' \dontshow{
 #' toy_sim <- function(n, theta) matrix(rnorm(2*n, theta), nrow = n)
@@ -197,6 +199,8 @@ multiPlotDefault <- function(objectList, thin = 1, burnin = 0, thetaTrue = NULL,
       abline(v = thetaTrue[k], col = 'forestgreen', lty = 3)
     }
   }
+  oldpar <- par(no.readonly = TRUE)    # get current user par settings
+  on.exit(par(oldpar))            # reset current user par settings
   par(mar=c(0,0,0,0), cex = cex.legend)
   plot(0, type = "n", axes = FALSE, xlab = "", ylab = "")
   if (is.null(label)) {

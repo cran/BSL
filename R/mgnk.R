@@ -4,19 +4,19 @@
 #' the results from the multivariate G & K \insertCite{Drovandi2011}{BSL} example from \insertCite{An2019;textual}{BSL}.
 #'
 #' @param theta_tilde   A vector with 15 elements for the proposed model parameters.
-#' @param T             The number of observations in the data.
+#' @param TT             The number of observations in the data.
 #' @param J             The number of variables in the data.
 #' @param bound         A matrix of boundaries for the uniform prior.
-#' @param y				A \code{T} \ifelse{html}{\out{&times}}{\eqn{\times}} \code{J} matrix of data.
+#' @param y				A \code{TT} \ifelse{html}{\out{&times}}{\eqn{\times}} \code{J} matrix of data.
 #'
 #' @details
 #' It is not practical to give a reasonable explanation of this example through R documentation
 #' given the number of equations involved. We refer the reader to the BSLasso paper \insertCite{An2019}{BSL}
-#' at \url{https://doi.org/10.1080/10618600.2018.1537928} for information on the model and summary statistic used in this example.
+#' at <doi:10.1080/10618600.2018.1537928> for information on the model and summary statistic used in this example.
 #'
 #' @section An example dataset:
 #'
-#' We use the foreign currency exchange data available from \url{http://www.rba.gov.au/statistics/historical-data.html}
+#' We use the foreign currency exchange data available from \url{https://www.rba.gov.au/statistics/historical-data.html}
 #' as in \insertCite{An2019;textual}{BSL}.
 #'
 #' \itemize{
@@ -40,7 +40,7 @@
 #'
 #' # Performing BSL (reduce the number of iterations M if desired)
 #' # Opening up the parallel pools using doParallel
-#' cl <- makeCluster(detectCores() - 1)
+#' cl <- makeCluster(min(detectCores() - 1,2))
 #' registerDoParallel(cl)
 #' resultMgnkBSL <- bsl(mgnk$data, n = 60, M = 80000, model = model, covRandWalk = mgnk$cov,
 #'     method = "BSL", parallel = FALSE, verbose = 1L, plotOnTheFly = TRUE)
@@ -52,7 +52,7 @@
 #'
 #' # Performing uBSL (reduce the number of iterations M if desired)
 #' # Opening up the parallel pools using doParallel
-#' cl <- makeCluster(detectCores() - 1)
+#' cl <- makeCluster(min(detectCores() - 1,2))
 #' registerDoParallel(cl)
 #' resultMgnkuBSL <- bsl(mgnk$data, n = 60, M = 80000, model = model, covRandWalk = mgnk$cov,
 #'     method = "uBSL", parallel = FALSE, verbose = 1L)
@@ -69,7 +69,7 @@
 #'                    exp(seq(-4,-0.5,length.out=20)), exp(seq(-5,-2,length.out=20)))
 #'
 #' # Opening up the parallel pools using doParallel
-#' cl <- makeCluster(detectCores() - 1)
+#' cl <- makeCluster(min(detectCores() - 1,2))
 #' registerDoParallel(cl)
 #' set.seed(100)
 #' sp_mgnk <- selectPenalty(ssy, n = c(15, 20, 30, 50), lambda = lambda_all, theta = mgnk$start,
@@ -83,7 +83,7 @@
 #'
 #' # Performing BSLasso with a fixed penalty (reduce the number of iterations M if desired)
 #' # Opening up the parallel pools using doParallel
-#' cl <- makeCluster(detectCores() - 1)
+#' cl <- makeCluster(min(detectCores() - 1,2))
 #' registerDoParallel(cl)
 #' resultMgnkBSLasso <- bsl(mgnk$data, n = 20, M = 80000, model = model, covRandWalk = mgnk$cov,
 #'     method = "BSL", shrinkage = "glasso", penalty = 0.3, standardise = TRUE, parallel = FALSE,
@@ -97,7 +97,7 @@
 #'
 #' # Performing semiBSL (reduce the number of iterations M if desired)
 #' # Opening up the parallel pools using doParallel
-#' cl <- makeCluster(detectCores() - 1)
+#' cl <- makeCluster(min(detectCores() - 1,2))
 #' registerDoParallel(cl)
 #' resultMgnkSemiBSL <- bsl(mgnk$data, n = 60, M = 80000, model = model, covRandWalk = mgnk$cov,
 #'     method = "semiBSL", parallel = FALSE, verbose = 1L)
@@ -109,6 +109,7 @@
 #'
 #' # Plotting the results together for comparison
 #' # plot using the R default plot function
+#' oldpar <- par()
 #' par(mar = c(4, 4, 1, 1), oma = c(0, 1, 2, 0))
 #' combinePlotsBSL(list(resultMgnkBSL, resultMgnkuBSL, resultMgnkBSLasso, resultMgnkSemiBSL),
 #'                 which = 1, thin = 20, label = c("bsl", "ubsl", "bslasso", "semiBSL"),
@@ -123,6 +124,7 @@
 #'     options.theme = list(plot.margin = grid::unit(rep(0.03,4),"npc"),
 #'         axis.title = ggplot2::element_text(size=12), axis.text = ggplot2::element_text(size = 8),
 #'         legend.text = ggplot2::element_text(size = 12)))
+#' par(mar = oldpar$mar, oma = oldpar$oma)
 #' }
 #'
 #' @references
@@ -259,7 +261,7 @@ paraBackTransformGnk <- function(theta_tilde, J, bound) {
 #' The function \code{mgnk_sim} simulates from the multivariate G & K model.
 #' @rdname mgnk
 #' @export
-mgnk_sim <- function(theta_tilde, T, J, bound) {
+mgnk_sim <- function(theta_tilde, TT, J, bound) {
     theta <- paraBackTransformGnk(theta_tilde, J, bound)
     if (J == 1) {
         theta_gnk <- theta
@@ -275,8 +277,8 @@ mgnk_sim <- function(theta_tilde, T, J, bound) {
         Sigma <- reparaCorr(theta_corr, J)$Sigma
     }
 
-    y <- array(0, c(T, J))
-    zu <- mvrnorm(n = T, mu = numeric(J), Sigma = Sigma)
+    y <- array(0, c(TT, J))
+    zu <- mvrnorm(n = TT, mu = numeric(J), Sigma = Sigma)
 
     for (i in 1 : J) {
         y[, i] <- qgnk(zu[, i], theta[4*(i-1) + 1], theta[4*(i-1) + 2], theta[4*(i-1) + 3], theta[4*(i-1) + 4])
@@ -285,7 +287,7 @@ mgnk_sim <- function(theta_tilde, T, J, bound) {
 }
 
 summStatRobust <- function(x) {
-    T <- length(x)
+    TT <- length(x)
     ssx <- numeric(4)
     octile <- elliplot::ninenum(x)[2:8]
     ssx[1] <- octile[4]

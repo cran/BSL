@@ -12,6 +12,10 @@ getGamma(object, ...)
 
 \item{...}{Other arguments.}
 }
+\value{
+The matrix of gamma samples (the latent parameters for BSLmisspec
+method), after removing burn-in and thinning.
+}
 \description{
 see \code{\link{BSLclass}}
 }

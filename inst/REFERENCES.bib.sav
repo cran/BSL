@@ -31,8 +31,7 @@
     publisher = {Taylor & Francis},
     doi = {10.1080/10618600.2018.1537928}
 }
-
-@article{An2018,
+{An2018,
   author  = {An, Ziwen and Nott, David J. and Drovandi, Christopher},
   title   = {Robust Bayesian Synthetic Likelihood via a Semi-Parametric Approach},
   journal = {Statistics and Computing (In Press)},
@@ -57,8 +56,7 @@
   year    = {2021},
   url     = {https://arxiv.org/abs/1909.04857},
 }
-
-@article{Ghurye1969,
+{Ghurye1969,
     author = "Ghurye, S. G. and Olkin, Ingram",
     fjournal = "The Annals of Mathematical Statistics",
     journal = "Ann. Math. Statist.",
@@ -83,8 +81,7 @@
   publisher = {Springer},
   doi       = {10.1007/s11222-011-9237-0}
 }
-
-@Article{Friedman2008,
+{Friedman2008,
   author    = {Friedman, Jerome and Hastie, Trevor and Tibshirani, Robert},
   title     = {Sparse Inverse Covariance Estimation with the Graphical Lasso},
   journal   = {Biostatistics},
@@ -106,8 +103,7 @@
   pages   = {340-349},
   doi     = {10.1198/016214508000000021}
 }
-
-@Article{Neal2003,
+{Neal2003,
   author = "Neal, Radford M.",
   journal = "The Annals of Statistics",
   month = "06",
@@ -142,8 +138,7 @@
   doi = "10.1016/j.ecolmodel.2017.06.025",
   author = "Philippe Marchand and Morgan Boenke and David M. Green",
 }
-
-@article{Jones2009,
+{Jones2009,
     author = {Jones, M. C. and Pewsey, Arthur},
     title = "{Sinh-arcsinh distributions}",
     journal = {Biometrika},
