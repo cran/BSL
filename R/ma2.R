@@ -3,6 +3,8 @@
 #' @description In this example we wish to estimate the parameters of a simple
 #'   MA(2) time series model. We provide the data and tuning parameters required
 #'   to reproduce the results in \insertCite{An2019;textual}{BSL}.
+#'   The journal article \insertCite{An2022;textual}{BSL} provides a full
+#'   description of how to use this package for the toad example.
 #'
 #' @param theta     A vector of proposed model parameters,
 #'   \ifelse{html}{\out{<i>&#952<sub>1</sub></i>}}{\eqn{\theta_1}} and

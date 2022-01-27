@@ -76,7 +76,9 @@ Bayesian synthetic likelihood (BSL,
 
  }
 
- Extensions to this package are planned.
+ Extensions to this package are planned. For a journal article describing how
+ to use this package, including full descriptions on the MA(2) and toad examples,
+ see \insertCite{An2022;textual}{BSL}.
 }
 \references{
 \insertAllCited{}

@@ -56,6 +56,8 @@ This example estimates the parameter for the toad example. The
   model is proposed by \insertCite{Marchand2017;textual}{BSL}. This example
   includes both simulated and real data. The real data is obtained from 
   the supplementary material of \insertCite{Marchand2017;textual}{BSL}.
+  The journal article \insertCite{An2022;textual}{BSL} provides a full
+  description of how to use this package for the toad example.
 }
 \details{
 The example includes the three different returning models of
