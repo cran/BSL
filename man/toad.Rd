@@ -24,9 +24,7 @@ toad_prior(theta)
 }
 \arguments{
 \item{theta}{A vector of proposed model parameters,
-\ifelse{html}{\out{<i>&#945</i>}}{\eqn{\alpha}},
-\ifelse{html}{\out{<i>&#947</i>}}{\eqn{\gamma}} and
-\ifelse{html}{\out{p<sub>0</sub>}}{\eqn{p_0}}.}
+\eqn{\alpha}, \eqn{\gamma} and \eqn{p_0}.}
 
 \item{ntoads}{The number of toads to simulate in the observation.}
 
@@ -82,24 +80,24 @@ statistics are the log differences between adjacent quantiles and also the media
   A simulated dataset and a real dataset are provided in this example. Both
   datasets contain observations from 66 toads for 63 days. The simulated
   dataset is simulated with parameter
-  \ifelse{html}{\out{<i>&#952=(1.7,35,0.6)</i>}}{\eqn{\theta = (1.7, 35,
-  0.6)}}. This is the data used in \insertCite{An2018;textual}{BSL}. The real
+  \eqn{\theta = (1.7, 35,
+  0.6)}. This is the data used in \insertCite{An2018;textual}{BSL}. The real
   dataset is obtained from the supplementary data of
   \insertCite{Marchand2017;textual}{BSL}.
 
   \itemize{
 
   \item \code{data_simulated}:  A 63
-  \ifelse{html}{\out{<i>&times</i>}}{\eqn{\times}} 66 matrix of the observed
+  \eqn{\times} 66 matrix of the observed
   toad locations (simulated data).
 
   \item \code{data_real}:       A 63
-  \ifelse{html}{\out{<i>&times</i>}}{\eqn{\times}} 66 matrix of the observed
+  \eqn{\times} 66 matrix of the observed
   toad locations (real data).
 
   \item \code{cov}: The covariance matrix of a multivariate normal random
   walk proposal distribution used in the MCMC, in the form of a 3
-  \ifelse{html}{\out{&times}}{\eqn{\times}} 3 matrix.
+  \eqn{\times} 3 matrix.
 
   \item \code{theta0}: A vector of suitable initial values of the parameters
   for MCMC.

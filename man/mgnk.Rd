@@ -21,7 +21,7 @@ mgnk_sum(y)
 
 \item{bound}{A matrix of boundaries for the uniform prior.}
 
-\item{y}{A \code{TT} \ifelse{html}{\out{&times}}{\eqn{\times}} \code{J} matrix of data.}
+\item{y}{A \code{TT} \eqn{\times} \code{J} matrix of data.}
 }
 \description{
 Here we provide the data and tuning parameters required to reproduce
@@ -39,7 +39,7 @@ We use the foreign currency exchange data available from \url{https://www.rba.go
 as in \insertCite{An2019;textual}{BSL}.
 
 \itemize{
- \item \code{data}:  A \code{1651} \ifelse{html}{\out{&times}}{\eqn{\times}} \code{3} matrix of data.
+ \item \code{data}:  A \code{1651} \eqn{\times} \code{3} matrix of data.
  \item \code{sim_args}: Values of \code{sim_args} relevant to this example.
  \item \code{start}: A vector of suitable initial values of the parameters for MCMC.
  \item \code{cov}: The covariance matrix of a multivariate normal random walk proposal distribution used in the MCMC, in the form of a 15 by 15 matrix

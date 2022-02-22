@@ -7,8 +7,8 @@
 sim_toad(params, ntoad, nday, model = 1L, d0 = 100)
 }
 \arguments{
-\item{params}{A vector of proposed model parameters, \ifelse{html}{\out{<i>&#945</i>}}{\eqn{\alpha}},
-\ifelse{html}{\out{<i>&#947</i>}}{\eqn{gamma}} and \ifelse{html}{\out{p<sub>0</sub>}}{\eqn{p_0}}.}
+\item{params}{A vector of proposed model parameters, \eqn{\alpha},
+\eqn{gamma} and \eqn{p_0}.}
 
 \item{ntoad}{The number of toads to simulate in the observation.}
 

@@ -1,8 +1,8 @@
 Package: BSL
 Type: Package
 Title: Bayesian Synthetic Likelihood
-Version: 3.2.3
-Date: 2022-01-27
+Version: 3.2.4
+Date: 2022-02-22
 Authors@R: c(person("Ziwen","An",role=c("aut"),email="ziwen.an@hdr.qut.edu.au",comment = c(ORCID = "0000-0002-9947-5182")),
             person("Leah F.","South",role=c("aut","cre"),email="l1.south@qut.edu.au",comment = c(ORCID = "0000-0002-5646-2963")),
             person("Christopher C.","Drovandi",role=c("aut"),email="c.drovandi@qut.edu.au",comment = c(ORCID = "0000-0001-9222-8763")))
@@ -47,10 +47,10 @@ Collate: 'BSL-package.R' 'RcppExports.R' 's4-MODEL.R' 's4-BSL.R'
         'toad.R'
 RdMacros: Rdpack
 NeedsCompilation: yes
-Packaged: 2022-01-27 09:39:00 UTC; southl
+Packaged: 2022-02-22 06:27:35 UTC; southl
 Author: Ziwen An [aut] (<https://orcid.org/0000-0002-9947-5182>),
   Leah F. South [aut, cre] (<https://orcid.org/0000-0002-5646-2963>),
   Christopher C. Drovandi [aut] (<https://orcid.org/0000-0001-9222-8763>)
 Maintainer: Leah F. South <l1.south@qut.edu.au>
 Repository: CRAN
-Date/Publication: 2022-01-27 12:10:15 UTC
+Date/Publication: 2022-02-22 07:10:08 UTC

@@ -8,7 +8,7 @@ simulate_cell(x, rows, cols, Pm, Pp, sim_iters, num_obs)
 }
 \arguments{
 \item{x}{The initial matrix of cell presences of size \code{rows}
-\ifelse{html}{\out{&times}}{\eqn{\times}} \code{cols}.}
+\eqn{\times} \code{cols}.}
 
 \item{rows}{The number of rows in the lattice (rows in the cell location
 matrix).}
@@ -16,10 +16,10 @@ matrix).}
 \item{cols}{The number of columns in the lattice (columns in the cell
 location matrix).}
 
-\item{Pm}{Parameter \ifelse{html}{\out{<i>P<sub>m</sub></i>}}{\eqn{P_m}},
+\item{Pm}{Parameter \eqn{P_m},
 the probability of cell movement.}
 
-\item{Pp}{Parameter \ifelse{html}{\out{<i>P<sub>p</sub></i>}}{\eqn{P_p}},
+\item{Pp}{Parameter \eqn{P_p},
 the probability of cell proliferation.}
 
 \item{sim_iters}{The number of discretisation steps to get to when an
@@ -32,8 +32,8 @@ simulation time.}
 \item{num_obs}{The total number of images taken after initialisation.}
 }
 \value{
-A \code{rows} \ifelse{html}{\out{&times}}{\eqn{\times}} \code{cols}
- \ifelse{html}{\out{&times}}{\eqn{\times}} \code{num_obs} array
+A \code{rows} \eqn{\times} \code{cols}
+ \eqn{\times} \code{num_obs} array
   of the cell presences at times \code{1:num_obs} (not time 0).
 }
 \description{

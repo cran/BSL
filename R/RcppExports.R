@@ -5,14 +5,14 @@
 #'
 #' @description Simulation function of the cell biology example.
 #' @param x The initial matrix of cell presences of size \code{rows}
-#' \ifelse{html}{\out{&times}}{\eqn{\times}} \code{cols}.
-#' @param Pm Parameter \ifelse{html}{\out{<i>P<sub>m</sub></i>}}{\eqn{P_m}},
+#' \eqn{\times} \code{cols}.
+#' @param Pm Parameter \eqn{P_m},
 #' the probability of cell movement.
-#' @param Pp Parameter \ifelse{html}{\out{<i>P<sub>p</sub></i>}}{\eqn{P_p}},
+#' @param Pp Parameter \eqn{P_p},
 #' the probability of cell proliferation.
 #' @inheritParams cell
-#' @return  A \code{rows} \ifelse{html}{\out{&times}}{\eqn{\times}} \code{cols}
-#'  \ifelse{html}{\out{&times}}{\eqn{\times}} \code{num_obs} array
+#' @return  A \code{rows} \eqn{\times} \code{cols}
+#'  \eqn{\times} \code{num_obs} array
 #'   of the cell presences at times \code{1:num_obs} (not time 0).
 #' @export
 simulate_cell <- function(x, rows, cols, Pm, Pp, sim_iters, num_obs) {
@@ -34,8 +34,8 @@ rstable <- function(scale, alpha) {
 #' The simulation function for the toad example
 #'
 #' @description The simulation function for the toad example.
-#' @param params A vector of proposed model parameters, \ifelse{html}{\out{<i>&#945</i>}}{\eqn{\alpha}},
-#'   \ifelse{html}{\out{<i>&#947</i>}}{\eqn{gamma}} and \ifelse{html}{\out{p<sub>0</sub>}}{\eqn{p_0}}.
+#' @param params A vector of proposed model parameters, \eqn{\alpha},
+#'   \eqn{gamma} and \eqn{p_0}.
 #' @param ntoad The number of toads to simulate in the observation.
 #' @param nday The number of days lasted of the observation.
 #' @param model Which model to be used. 1 for the random return model, 2 for the nearest return model,

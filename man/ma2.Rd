@@ -20,8 +20,8 @@ ma2_prior(theta)
 }
 \arguments{
 \item{theta}{A vector of proposed model parameters,
-\ifelse{html}{\out{<i>&#952<sub>1</sub></i>}}{\eqn{\theta_1}} and
-\ifelse{html}{\out{<i>&#952<sub>2</sub></i>}}{\eqn{\theta_2}}.}
+\eqn{\theta_1} and
+\eqn{\theta_2}.}
 
 \item{TT}{The number of observations.}
 
@@ -46,18 +46,15 @@ In this example we wish to estimate the parameters of a simple
 This example is based on estimating the parameters of a basic MA(2)
   time series model of the form
 
-  \ifelse{html}{\out{<center><i>y<sub>t</sub> = z<sub>t</sub> +
-  &#952<sub>1</sub>z<sub>t-1</sub> +
-  &#952<sub>2</sub>z<sub>t-2</sub></i>,</center>}}{\deqn{y_t = z_t + \theta_1
-  z_{t-1} + \theta_2 z_{t-2},}}
+  \deqn{y_t = z_t + \theta_1 z_{t-1} + \theta_2 z_{t-2},}
 
-  where \eqn{t=1,\ldots,TT} and \ifelse{html}{\out{<i>z<sub>t</sub> ~
-  N(0,1)</i>}}{\eqn{z_t \sim N(0,1)}} for \eqn{t=-1,0,\ldots,TT}. A uniform
+  where \eqn{t=1,\ldots,TT} and \eqn{z_t \sim N(0,1)}
+  for \eqn{t=-1,0,\ldots,TT}. A uniform
   prior is used for this example, subject to the restrictions that
-  \ifelse{html}{\out{-2<&#952<sub>1</sub><2}}{\eqn{-2<\theta_1<2}},
-  \ifelse{html}{\out{&#952<sub>1</sub>+&#952<sub>2</sub>>-1}}{\eqn{\theta_1+\theta_2>-1}}
+  \eqn{-2<\theta_1<2},
+  \eqn{\theta_1+\theta_2>-1}
    and
-  \ifelse{html}{\out{&#952<sub>1</sub>-&#952<sub>2</sub><1}}{\eqn{\theta_1-\theta_2<1}}
+  \eqn{\theta_1-\theta_2<1}
    so that invertibility of the time series is satisfied. The summary
   statistics are simply the full data.
 }
@@ -70,8 +67,8 @@ function.
 
 \item \code{ma2_sum}: Returns the summary statistics for a given data set. The
 skewness and kurtosis of the summary statistics can be controlled via the
-\ifelse{html}{\out{&#949}}{\eqn{\epsilon}} and
-\ifelse{html}{\out{&#950}}{\eqn{\delta}} parameters. This is the
+\eqn{\epsilon} and
+\eqn{\delta} parameters. This is the
 sinh-arcsinnh transformation of \insertCite{Jones2009;textual}{BSL}. By default,
 the summary statistics function simply returns the raw data. Otherwise, the
 transformation is introduced to motivate the ``semiBSL'' method.
@@ -87,8 +84,8 @@ series.
   An example ``observed'' dataset and the tuning parameters relevant to that
   example can be obtained using \code{data(ma2)}. This ``observed'' data is a
   simulated dataset with
-  \ifelse{html}{\out{&#952<sub>1</sub>=0.6}}{\eqn{\theta_1 = 0.6}},
-  \ifelse{html}{\out{&#952<sub>2</sub>=0.2}}{\eqn{\theta_2=0.2}} and
+  \eqn{\theta_1 = 0.6},
+  \eqn{\theta_2=0.2} and
   \eqn{TT=50}. Further information about this model and the specific choices
   of tuning parameters used in BSL and BSLasso can be found in An et al.
   (2019).
@@ -106,7 +103,7 @@ series.
 
   \item \code{cov}: The covariance matrix of a multivariate normal random
   walk proposal distribution used in the MCMC, in the form of a 2
-  \ifelse{html}{\out{&times}}{\eqn{\times}} 2 matrix }
+  \eqn{\times} 2 matrix }
 }
 
 \examples{

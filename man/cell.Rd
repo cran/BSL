@@ -17,11 +17,10 @@ cell_prior(theta)
 }
 \arguments{
 \item{theta}{A vector of proposed model parameters,
-\ifelse{html}{\out{<i>P<sub>m</sub></i>}}{\eqn{P_m}} and
-\ifelse{html}{\out{<i>P<sub>p</sub></i>}}{\eqn{P_p}}.}
+\eqn{P_m} and \eqn{P_p}.}
 
 \item{Yinit}{The initial matrix of cell presences of size \code{rows}
-\ifelse{html}{\out{&times}}{\eqn{\times}} \code{cols}.}
+\eqn{\times} \code{cols}.}
 
 \item{rows}{The number of rows in the lattice (rows in the cell location
 matrix).}
@@ -38,8 +37,8 @@ simulation time.}
 
 \item{num_obs}{The total number of images taken after initialisation.}
 
-\item{Y}{A \code{rows} \ifelse{html}{\out{&times}}{\eqn{\times}}
-\code{cols} \ifelse{html}{\out{&times}}{\eqn{\times}} \code{num_obs} array
+\item{Y}{A \code{rows} \eqn{\times}
+\code{cols} \eqn{\times} \code{num_obs} array
 of the cell presences at times \code{1:num_obs} (not time 0).}
 }
 \description{
@@ -60,17 +59,16 @@ Cell motility (movement) and proliferation (reproduction) cause
   Images of the cells are taken until the scratch has closed up and the cells
   are in contact again. Each image can be converted to a binary matrix by
   forming a lattice and recording the binary matrix (of size \code{rows}
-  \ifelse{html}{\out{&times}}{\eqn{\times}} \code{cols}) of cell presences.
+  \eqn{\times} \code{cols}) of cell presences.
 
   The model that we consider is a random walk model with parameters for the
   probability of cell movement
-  (\ifelse{html}{\out{<i>P<sub>m</sub></i>}}{\eqn{P_m}}) and the probability
+  (\eqn{P_m}) and the probability
   of cell proliferation
-  (\ifelse{html}{\out{<i>P<sub>p</sub></i>}}{\eqn{P_p}}) and it has no
+  (\eqn{P_p}) and it has no
   tractable likelihood function. We use the vague priors
-  \ifelse{html}{\out{<i>P<sub>m</sub> ~ N(0,1)</i>}}{\eqn{P_m \sim U(0,1)}}
-  and \ifelse{html}{\out{<i>P<sub>p</sub> ~ N(0,1)</i>}}{\eqn{P_p \sim
-  U(0,1)}}.
+  \eqn{P_m \sim U(0,1)}
+  and \eqn{P_p \sim U(0,1)}.
 
   We have a total of 145 summary statistics, which are made up of the Hamming
   distances between the binary matrices for each time point and the total
@@ -93,7 +91,7 @@ summary statistics for this example.
 
 \item \code{cell_prior}: The function \code{cell_prior(theta)} evaluates the log
 prior density at the parameter value
-\ifelse{html}{\out{<i>&#952</i>}}{\eqn{\theta}}.
+\eqn{\theta}.
 }}
 
 \section{A simulated dataset}{
@@ -101,9 +99,8 @@ prior density at the parameter value
 
   An example ``observed'' dataset and the tuning parameters relevant to that
   example can be obtained using \code{data(cell)}. This ``observed'' data is
-  a simulated dataset with \ifelse{html}{\out{<i>P<sub>m</sub> =
-  0.35</i>}}{\eqn{P_m = 0.35}} and \ifelse{html}{\out{<i>P<sub>p</sub> =
-  0.001</i>}}{\eqn{P_p = 0.001}}. The lattice has 27 \code{rows} and 36
+  a simulated dataset with \eqn{P_m = 0.35} and 
+  \eqn{P_p = 0.001}. The lattice has 27 \code{rows} and 36
   \code{cols} and there are \code{num_obs = 144} observations after time 0
   (to mimic images being taken every 5 minutes for 12 hours). The simulation
   is based on there initially being 110 cells in the assay.
@@ -114,8 +111,8 @@ prior density at the parameter value
   \itemize{
 
   \item \code{data}:  The \code{rows}
-  \ifelse{html}{\out{&times}}{\eqn{\times}} \code{cols}
-  \ifelse{html}{\out{&times}}{\eqn{\times}} \code{num_obs} array of the cell
+  \eqn{\times} \code{cols}
+  \eqn{\times} \code{num_obs} array of the cell
   presences at times 1:144.
 
   \item \code{sim_args}: Values of \code{sim_args} relevant to this example.
@@ -128,7 +125,7 @@ prior density at the parameter value
 
   \item \code{cov}: The covariance matrix of a multivariate normal random
   walk proposal distribution used in the MCMC, in the form of a 2
-  \ifelse{html}{\out{&times}}{\eqn{\times}} 2 matrix.
+  \eqn{\times} 2 matrix.
 
   }
 }
