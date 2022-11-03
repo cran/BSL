@@ -1,4 +1,4 @@
-cc888673873659e4f1b6b3ea2fd5f47d *DESCRIPTION
+e0b100b9ca169dffe3fb78004e274b17 *DESCRIPTION
 77ca822c30c3f4782d54a6b444c4edcd *NAMESPACE
 8194d4be29d765cea2b88b6d876da549 *NEWS.md
 60d25bd4497f22985f355e872fdb0dc9 *R/BSL-package.R
@@ -27,7 +27,7 @@ b07b78c3752e8cfaf6670b7a30f5b1bb *R/semiparaKernelEstimate.R
 b58430bed5b6a3bf51e5245eb8642c50 *R/sliceGammaVariance.R
 0071ec830cd5ad3e728fc677b86dde59 *R/synLikeMisspec.R
 d95c888ca46c113446a79f7f5825f763 *R/toad.R
-4540bb663aa9a1636a02ffa65deb335e *build/partial.rdb
+be41b92e54d38ea68c0085519062d4b8 *build/partial.rdb
 51003cddcda659f608ac174432281048 *data/cell.rda
 4a9139bb050dd860ce6ee66043f90dfe *data/ma2.rda
 9fc291b57b7166e2027946f03225bd9c *data/mgnk.rda
@@ -69,4 +69,4 @@ ed5de02f4615ee37259c585fa645e3d8 *man/sliceGammaMean.Rd
 bf914be7f122d3808e7de46144b2391a *src/Makevars.win
 9bca1c2a6d098b47464840b7252a1f91 *src/RcppExports.cpp
 bb2ce926daa08d0965eaad257138cf6d *src/simulate_cell.cpp
-27505e38f708ea24fb34c340742de32c *src/simulate_toad.cpp
+c75c024609a7e8bcf3829dbb2ea08d81 *src/simulate_toad.cpp

@@ -152,7 +152,7 @@ vector<double> obsMat2deltaxCpp(Rcpp::NumericMatrix X, unsigned int lag) {
         for (i=0; i<ndays-lag; i++) {
             x0 = X(i,j);
             x1 = X(i+lag,j);
-            if (NumericVector::is_na(x0) | NumericVector::is_na(x1)) continue;
+            if (NumericVector::is_na(x0) || NumericVector::is_na(x1)) continue;
             temp = x1 - x0;
             x.push_back(abs(temp));
         }
@@ -179,7 +179,7 @@ NumericVector obsMat2deltax(Rcpp::NumericMatrix X, unsigned int lag) {
         for (i=0; i<ndays-lag; i++) {
             x0 = X(i,j);
             x1 = X(i+lag,j);
-            if (NumericVector::is_na(x0) | NumericVector::is_na(x1)) continue;
+            if (NumericVector::is_na(x0) || NumericVector::is_na(x1)) continue;
             temp = x1 - x0;
             x.push_back(abs(temp));
         }
